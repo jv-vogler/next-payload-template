@@ -8,6 +8,9 @@ import { ArrowRight, Calendar, Clock, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+// @template:i18n-start
+import { useLocale, useTranslations } from "next-intl";
+// @template:i18n-end
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -23,25 +26,37 @@ type BlogListProps = {
 
 export function BlogList({ posts }: BlogListProps) {
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const locale = useLocale();
-  // const noPostsLabel = t("noPosts");
-  // const readingTimeFn = (minutes: number) => t("readingTime", { minutes });
-  // const updatedFn = (date: string) => t("updated", { date });
-  // const readMoreLabel = t("readMore");
+  const t = useTranslations("blog");
+  // @ts-ignore
+  const locale = useLocale();
+  // @ts-ignore
+  const noPostsLabel = t("noPosts");
+  // @ts-ignore
+  const readingTimeFn = (minutes: number) => t("readingTime", { minutes });
+  // @ts-ignore
+  const updatedFn = (date: string) => t("updated", { date });
+  // @ts-ignore
+  const readMoreLabel = t("readMore");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const noPostsLabel = "No posts yet.";
+  // @ts-ignore
   const readingTimeFn = (minutes: number) => `${minutes} min read`;
+  // @ts-ignore
   const updatedFn = (date: string) => `Updated ${date}`;
+  // @ts-ignore
   const readMoreLabel = "Read more";
   // @template:no-i18n-end
 
+  // @template:no-i18n-start
   // Detect locale for date formatting; fall back to "en"
+  // @ts-ignore
   const [locale, setLocale] = useState("en");
   useEffect(() => {
     setLocale(navigator.language.split("-")[0] ?? "en");
   }, []);
+  // @template:no-i18n-end
 
   if (posts.length === 0) {
     return (

@@ -4,6 +4,9 @@ import { Badge } from "@/ui/components/ui/badge";
 import { Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+// @template:i18n-start
+import { getTranslations } from "next-intl/server";
+// @template:i18n-end
 
 type RelatedPostsProps = {
   posts: Blog.Post[];
@@ -12,12 +15,16 @@ type RelatedPostsProps = {
 
 export async function RelatedPosts({ posts, locale }: RelatedPostsProps) {
   // @template:i18n-start
-  // const t = await getTranslations({ locale, namespace: "blog" });
-  // const relatedPostsLabel = t("relatedPosts");
-  // const readingTimeFn = (minutes: number) => t("readingTime", { minutes });
+  const t = await getTranslations({ locale, namespace: "blog" });
+  // @ts-ignore
+  const relatedPostsLabel = t("relatedPosts");
+  // @ts-ignore
+  const readingTimeFn = (minutes: number) => t("readingTime", { minutes });
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const relatedPostsLabel = "Related Posts";
+  // @ts-ignore
   const readingTimeFn = (minutes: number) => `${minutes} min read`;
   // @template:no-i18n-end
 

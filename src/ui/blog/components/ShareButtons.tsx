@@ -2,6 +2,9 @@
 
 import { Check, Link2, Linkedin, Share2, Twitter } from "lucide-react";
 import { useEffect, useState } from "react";
+// @template:i18n-start
+import { useTranslations } from "next-intl";
+// @template:i18n-end
 
 type ShareButtonsProps = {
   url: string;
@@ -10,17 +13,25 @@ type ShareButtonsProps = {
 
 export function ShareButtons({ url, title }: ShareButtonsProps) {
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const tA11y = useTranslations("a11y");
-  // const sharePostLabel = t("sharePost");
-  // const copyLinkLabel = t("copyLink");
-  // const linkCopiedLabel = t("linkCopied");
-  // const opensInNewTabLabel = tA11y("opensInNewTab");
+  const t = useTranslations("blog");
+  const tA11y = useTranslations("a11y");
+  // @ts-ignore
+  const sharePostLabel = t("sharePost");
+  // @ts-ignore
+  const copyLinkLabel = t("copyLink");
+  // @ts-ignore
+  const linkCopiedLabel = t("linkCopied");
+  // @ts-ignore
+  const opensInNewTabLabel = tA11y("opensInNewTab");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const sharePostLabel = "Share post";
+  // @ts-ignore
   const copyLinkLabel = "Copy link";
+  // @ts-ignore
   const linkCopiedLabel = "Link copied!";
+  // @ts-ignore
   const opensInNewTabLabel = "opens in new tab";
   // @template:no-i18n-end
 

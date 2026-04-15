@@ -152,6 +152,7 @@ function setupNeonBranch() {
 function selfDestruct() {
   rimrafSafe(path.join(ROOT, "setup.ts"));
   rimrafSafe(path.join(ROOT, ".template.json"));
+  rimrafSafe(path.join(ROOT, ".eslintignore"));
   rimrafSafe(path.join(ROOT, "scripts/lib/stripMarker.ts"));
   rimrafSafe(path.join(ROOT, "scripts/__tests__"));
   // Remove empty scripts/lib dir if possible

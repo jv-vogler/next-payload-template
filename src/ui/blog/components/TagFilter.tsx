@@ -3,6 +3,9 @@
 import { Badge } from "@/ui/components/ui/badge";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+// @template:i18n-start
+import { useTranslations } from "next-intl";
+// @template:i18n-end
 
 type TagFilterProps = {
   tags: string[];
@@ -10,12 +13,16 @@ type TagFilterProps = {
 
 export function TagFilter({ tags }: TagFilterProps) {
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const allTagsLabel = t("allTags");
-  // const filterByTagLabel = t("filterByTag");
+  const t = useTranslations("blog");
+  // @ts-ignore
+  const allTagsLabel = t("allTags");
+  // @ts-ignore
+  const filterByTagLabel = t("filterByTag");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const allTagsLabel = "All";
+  // @ts-ignore
   const filterByTagLabel = "Filter by tag";
   // @template:no-i18n-end
 

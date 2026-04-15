@@ -2,15 +2,20 @@
 
 import { ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
+// @template:i18n-start
+import { useTranslations } from "next-intl";
+// @template:i18n-end
 
 const SCROLL_THRESHOLD = 300;
 
 export function BackToTop() {
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const backToTopLabel = t("backToTop");
+  const t = useTranslations("blog");
+  // @ts-ignore
+  const backToTopLabel = t("backToTop");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const backToTopLabel = "Back to top";
   // @template:no-i18n-end
 

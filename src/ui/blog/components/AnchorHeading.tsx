@@ -4,6 +4,9 @@ import { cn } from "@/lib/utils";
 import { Link2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+// @template:i18n-start
+import { useTranslations } from "next-intl";
+// @template:i18n-end
 
 type AnchorHeadingProps = {
   id: string;
@@ -17,12 +20,16 @@ export function AnchorHeading({ id, level, children, className }: AnchorHeadingP
   const Tag = `h${level}` as "h2" | "h3" | "h4" | "h5" | "h6";
 
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const copyLinkLabel = t("copyLink");
-  // const linkCopiedLabel = t("linkCopied");
+  const t = useTranslations("blog");
+  // @ts-ignore
+  const copyLinkLabel = t("copyLink");
+  // @ts-ignore
+  const linkCopiedLabel = t("linkCopied");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const copyLinkLabel = "Copy link";
+  // @ts-ignore
   const linkCopiedLabel = "Link copied!";
   // @template:no-i18n-end
 

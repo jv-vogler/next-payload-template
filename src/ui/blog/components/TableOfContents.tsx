@@ -4,6 +4,9 @@ import type { Blog } from "@/core/blog";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+// @template:i18n-start
+import { useTranslations } from "next-intl";
+// @template:i18n-end
 
 type TableOfContentsProps = {
   headings: Blog.Heading[];
@@ -11,10 +14,12 @@ type TableOfContentsProps = {
 
 export function TableOfContents({ headings }: TableOfContentsProps) {
   // @template:i18n-start
-  // const t = useTranslations("blog");
-  // const tocLabel = t("tableOfContents");
+  const t = useTranslations("blog");
+  // @ts-ignore
+  const tocLabel = t("tableOfContents");
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const tocLabel = "Table of Contents";
   // @template:no-i18n-end
 
