@@ -16,3 +16,4 @@ coverage/
 !.vscode/extensions.json
 src/app/(payload)/importMap.js
 src/payload-types.ts
+.claude/settings.local.json
