@@ -188,7 +188,7 @@ export namespace Blog {
     };
   }
 
-  export function fromPayload(doc: PayloadPost, locale: string): Post {
+  export function fromPayload(doc: PayloadPost, locale: string = "en"): Post {
     return {
       slug: doc.slug,
       title: doc.title,

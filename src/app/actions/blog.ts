@@ -5,14 +5,8 @@ import { unstable_cache } from "next/cache";
 import type { Where } from "payload";
 import { cache } from "react";
 
-// @template:i18n-start
-// import type { Locale } from '@/i18n/config'
-// @template:i18n-end
-
 export const getAllPosts = cache(async function getAllPosts(
-  // @template:i18n-start
   locale = "en",
-  // @template:i18n-end
   tag?: string,
 ): Promise<Blog.Post[]> {
   const payload = await getPayloadSafe();
@@ -42,16 +36,8 @@ export const getAllPosts = cache(async function getAllPosts(
 });
 
 /** Return a deduplicated, alphabetically sorted list of all tags in use. */
-export const getAllTags = cache(async function getAllTags(
-  // @template:i18n-start
-  locale = "en",
-  // @template:i18n-end
-): Promise<string[]> {
-  const posts = await getAllPosts(
-    // @template:i18n-start
-    locale,
-    // @template:i18n-end
-  );
+export const getAllTags = cache(async function getAllTags(locale = "en"): Promise<string[]> {
+  const posts = await getAllPosts(locale);
   const tagSet = new Set<string>();
   for (const post of posts) {
     for (const tag of post.tags) {
@@ -69,16 +55,10 @@ export const getAllTags = cache(async function getAllTags(
 export const getRelatedPosts = cache(async function getRelatedPosts(
   slug: string,
   tags: string[],
-  // @template:i18n-start
   locale = "en",
-  // @template:i18n-end
   limit = 3,
 ): Promise<Blog.Post[]> {
-  const all = await getAllPosts(
-    // @template:i18n-start
-    locale,
-    // @template:i18n-end
-  );
+  const all = await getAllPosts(locale);
   const others = all.filter((post) => post.slug !== slug);
 
   const scored = others.map((post) => {
@@ -96,9 +76,7 @@ export const getRelatedPosts = cache(async function getRelatedPosts(
 
 export const getPost = cache(async function getPost(
   slug: string,
-  // @template:i18n-start
   locale = "en",
-  // @template:i18n-end
 ): Promise<{
   post: Blog.Post;
   content: SerializedEditorState;
@@ -135,16 +113,8 @@ export const getPost = cache(async function getPost(
 
 /** Cached minimal post data for CommandPalette — persists across requests for 1 hour. */
 export const getCachedMinimalPosts = unstable_cache(
-  async (
-    // @template:i18n-start
-    locale = "en",
-    // @template:i18n-end
-  ) => {
-    const posts = await getAllPosts(
-      // @template:i18n-start
-      locale,
-      // @template:i18n-end
-    );
+  async (locale = "en") => {
+    const posts = await getAllPosts(locale);
     return posts.map(({ slug, title, tags }) => ({ slug, title, tags }));
   },
   ["command-palette-posts"],
@@ -152,16 +122,8 @@ export const getCachedMinimalPosts = unstable_cache(
 );
 
 /** Return the featured post (or most recent) for the hero section. */
-export const getHeroPost = cache(async function getHeroPost(
-  // @template:i18n-start
-  locale = "en",
-  // @template:i18n-end
-) {
-  const posts = await getAllPosts(
-    // @template:i18n-start
-    locale,
-    // @template:i18n-end
-  );
+export const getHeroPost = cache(async function getHeroPost(locale = "en") {
+  const posts = await getAllPosts(locale);
   const featured = posts.find((p) => p.featured);
   const post = featured ?? posts[0] ?? null;
   if (!post) return null;
