@@ -30,7 +30,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm tsx setup.ts --name=test-${{ matrix.preset.name }} ${{ matrix.preset.flags }} --skip-install --skip-neon --skip-git
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm typecheck
