@@ -2,12 +2,10 @@
 
 A Next.js 16 + Payload CMS 3 template with opt-in features, Vercel Postgres/Blob, and agent skills out-of-the-box.
 
-> Replace `YOUR_GH_USER` below with your actual GitHub username after forking/pushing this template.
-
 ## Quick start
 
 ```bash
-gh repo create my-app --template YOUR_GH_USER/next-payload-template --private --clone
+gh repo create my-app --template jv-vogler/next-payload-template --private --clone
 cd my-app
 pnpm install
 pnpm tsx setup.ts --name=my-app
