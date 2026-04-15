@@ -17,3 +17,6 @@ coverage/
 src/app/(payload)/importMap.js
 src/payload-types.ts
 .claude/settings.local.json
+next-env.d.ts
+tsconfig.tsbuildinfo
+docs/
