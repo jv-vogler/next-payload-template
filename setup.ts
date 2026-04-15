@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import * as p from "@clack/prompts";
-import { stripMarker, stripMarkerHash } from "./scripts/lib/stripMarker.js";
+import { stripMarker, stripMarkerHash, stripMarkerJsx } from "./scripts/lib/stripMarker.js";
 
 type Manifest = {
   features: Record<
@@ -74,8 +74,14 @@ function applyManifest(selected: Record<string, boolean>) {
     if (!fs.existsSync(file)) continue;
     let text = fs.readFileSync(file, "utf8");
     for (const [feat, def] of Object.entries(MANIFEST.features)) {
-      for (const m of def.markers) text = stripMarker(text, m, !!selected[feat]);
-      for (const m of def.inverseMarkers ?? []) text = stripMarker(text, m, !selected[feat]);
+      for (const m of def.markers) {
+        text = stripMarker(text, m, !!selected[feat]);
+        text = stripMarkerJsx(text, m, !!selected[feat]);
+      }
+      for (const m of def.inverseMarkers ?? []) {
+        text = stripMarker(text, m, !selected[feat]);
+        text = stripMarkerJsx(text, m, !selected[feat]);
+      }
     }
     fs.writeFileSync(file, text);
   }
@@ -211,6 +217,9 @@ async function run() {
   applyManifest(selected);
   pruneDeps(selected);
   writeEnvLocal();
+
+  // Re-format src/ to clean up any whitespace artifacts left by marker stripping
+  spawnSync("pnpm", ["exec", "oxfmt", "--write", "src/"], { stdio: "inherit" });
 
   if (!flags["skip-neon"]) setupNeonBranch();
 
