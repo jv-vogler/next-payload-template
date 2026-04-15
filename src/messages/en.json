@@ -1,0 +1,5 @@
+{
+  "home": { "welcome": "Welcome" },
+  "nav": { "home": "Home", "blog": "Blog" },
+  "blog": { "title": "Blog", "empty": "No posts yet." }
+}

@@ -1,0 +1,5 @@
+{
+  "home": { "welcome": "Bem-vindo" },
+  "nav": { "home": "Início", "blog": "Blog" },
+  "blog": { "title": "Blog", "empty": "Nenhum post ainda." }
+}
