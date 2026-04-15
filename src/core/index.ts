@@ -1,5 +1,5 @@
-export * as Blog from "./blog";
-export * as Contact from "./contact";
-export * as Navigation from "./navigation";
-export * as Social from "./social";
-export * as Theme from "./theme";
+export { Blog } from "./blog";
+export { Contact } from "./contact";
+export { Navigation } from "./navigation";
+export { Social } from "./social";
+export { Theme } from "./theme";
