@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getSettings } from "@/lib/payload";
-import "./globals.css";
+import "@/app/globals.css";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const settings = await getSettings();
