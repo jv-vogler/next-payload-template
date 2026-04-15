@@ -31,6 +31,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm tsx setup.ts --name=test-${{ matrix.preset.name }} ${{ matrix.preset.flags }} --skip-install --skip-neon --skip-git
       - run: pnpm install --no-frozen-lockfile
+      - name: Stub importMap for typecheck
+        run: echo 'export const importMap = {};' > 'src/app/(payload)/importMap.js'
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm typecheck
