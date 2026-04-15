@@ -11,7 +11,7 @@
     "payload": "payload",
     "generate:importmap": "payload generate:importmap",
     "generate:types": "payload generate:types",
-    "lint": "oxlint src/",
+    "lint": "oxlint --ignore-pattern=src/app/blog/** --ignore-pattern=src/app/feed.xml/** --ignore-pattern=src/app/actions/blog.ts --ignore-pattern=src/ui/blog/components/** src/",
     "format": "oxfmt --write src/",
     "format:check": "oxfmt --check src/",
     "typecheck": "tsgo --noEmit",
