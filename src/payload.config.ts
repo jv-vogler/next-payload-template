@@ -9,7 +9,7 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 // @template:blog-start
 import { Posts } from "./collections/Posts";
-import { LexicalCodeFeatureServer } from "./features/lexicalCode/feature.server";
+import { LexicalCodeFeature } from "./features/lexicalCode/feature.server";
 // @template:blog-end
 import { Settings } from "./globals/Settings";
 
@@ -32,7 +32,7 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       // @template:blog-start
-      LexicalCodeFeatureServer(),
+      LexicalCodeFeature(),
       // @template:blog-end
     ],
   }),
