@@ -1,2 +1,3 @@
 src/ui/blog/components/
 src/app/actions/blog.ts
+src/app/feed.xml/route.ts

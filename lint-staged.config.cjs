@@ -1,6 +1,7 @@
 const TEMPLATE_PATTERN_FILES = [
   'src/ui/blog/components/',
   'src/app/actions/blog.ts',
+  'src/app/feed.xml/route.ts',
 ]
 
 module.exports = {

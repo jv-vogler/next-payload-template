@@ -21,14 +21,16 @@ export async function GET(): Promise<NextResponse> {
 
   try {
     // @template:i18n-start
-    // const [enPosts, ptPosts] = await Promise.all([getAllPosts("en"), getAllPosts("pt")]);
-    // const allPosts = [
-    //   ...enPosts.map((p) => ({ ...p, locale: "en" })),
-    //   ...ptPosts.map((p) => ({ ...p, locale: "pt" })),
-    // ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const [enPosts, ptPosts] = await Promise.all([getAllPosts("en"), getAllPosts("pt")]);
+    // @ts-ignore
+    const allPosts = [
+      ...enPosts.map((p) => ({ ...p, locale: "en" })),
+      ...ptPosts.map((p) => ({ ...p, locale: "pt" })),
+    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     // @template:i18n-end
     // @template:no-i18n-start
     const posts = await getAllPosts();
+    // @ts-ignore
     const allPosts = posts
       .map((p) => ({ ...p, locale: "en" }))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -37,9 +39,11 @@ export async function GET(): Promise<NextResponse> {
     const items = allPosts
       .map((post) => {
         // @template:i18n-start
-        // const link = `${baseUrl}/${post.locale}/blog/${post.slug}`;
+        // @ts-ignore
+        const link = `${baseUrl}/${post.locale}/blog/${post.slug}`;
         // @template:i18n-end
         // @template:no-i18n-start
+        // @ts-ignore
         const link = `${baseUrl}/blog/${post.slug}`;
         // @template:no-i18n-end
         const categories = post.tags
