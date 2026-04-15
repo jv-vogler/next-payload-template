@@ -66,7 +66,7 @@ Enforced by `pnpm arch:check` (runs in CI).
 
 ## Agent skills
 
-`.agents/skills/` contains the canonical skill definitions. `.claude/skills/` contains symlinks for Claude Code. Skills included: `deploy-to-vercel`, `payload`, `vercel-composition-patterns`, `vercel-react-best-practices`, `web-design-guidelines`.
+`.agents/skills/` contains the canonical skill definitions. `.claude/skills/` contains symlinks for Claude Code. Skills included: `deploy-to-vercel`,`frontend-design`, `payload`, `vercel-composition-patterns`, `vercel-react-best-practices`, `web-design-guidelines`.
 
 ## Tooling
 
