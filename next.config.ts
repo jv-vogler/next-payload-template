@@ -13,8 +13,10 @@ const nextConfig: NextConfig = {
 };
 
 // @template:i18n-start
+// @ts-ignore
 export default withPayload(withNextIntl(nextConfig));
 // @template:i18n-end
 // @template:no-i18n-start
-// export default withPayload(nextConfig)
+// @ts-ignore
+export default withPayload(nextConfig);
 // @template:no-i18n-end
