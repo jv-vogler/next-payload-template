@@ -14,6 +14,9 @@ import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+// @template:i18n-start
+import { getTranslations } from "next-intl/server";
+// @template:i18n-end
 
 export const revalidate = 3600;
 
@@ -36,12 +39,32 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+  // @template:i18n-start
+  // @ts-ignore
+  const locale = (resolvedParams as { slug: string; locale: string }).locale ?? "en";
+  // @template:i18n-end
 
   try {
     const { post } = await getPost(slug);
     const showUpdated = isUpdatedAfterPublish(post.date, post.updatedAt);
     const coverImageUrl = post.coverImage?.heroUrl ?? post.coverImage?.url;
+    // @template:i18n-start
+    // @ts-ignore
+    const metaUrl = `${BASE_URL}/${locale}/blog/${slug}`;
+    // @ts-ignore
+    const metaAlternates = {
+      canonical: metaUrl,
+      languages: { en: `${BASE_URL}/en/blog/${slug}`, pt: `${BASE_URL}/pt/blog/${slug}` },
+    };
+    // @template:i18n-end
+    // @template:no-i18n-start
+    // @ts-ignore
+    const metaUrl = `${BASE_URL}/blog/${slug}`;
+    // @ts-ignore
+    const metaAlternates = { canonical: metaUrl };
+    // @template:no-i18n-end
 
     return {
       title: post.title,
@@ -53,12 +76,7 @@ export async function generateMetadata({
         publishedTime: post.date,
         ...(showUpdated && post.updatedAt ? { modifiedTime: post.updatedAt } : {}),
         tags: post.tags,
-        // @template:i18n-start
-        // url: `${BASE_URL}/${locale}/blog/${slug}`,
-        // @template:i18n-end
-        // @template:no-i18n-start
-        url: `${BASE_URL}/blog/${slug}`,
-        // @template:no-i18n-end
+        url: metaUrl,
         ...(coverImageUrl
           ? {
               images: [
@@ -70,15 +88,7 @@ export async function generateMetadata({
             }
           : {}),
       },
-      alternates: {
-        // @template:i18n-start
-        // canonical: `${BASE_URL}/${locale}/blog/${slug}`,
-        // languages: { en: `${BASE_URL}/en/blog/${slug}`, pt: `${BASE_URL}/pt/blog/${slug}` },
-        // @template:i18n-end
-        // @template:no-i18n-start
-        canonical: `${BASE_URL}/blog/${slug}`,
-        // @template:no-i18n-end
-      },
+      alternates: metaAlternates,
     };
   } catch {
     return {
@@ -88,13 +98,16 @@ export async function generateMetadata({
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
 
   // @template:i18n-start
-  // const locale = params.locale;
-  // const t = await getTranslations({ locale, namespace: "blog" });
+  // @ts-ignore
+  const locale = (resolvedParams as { slug: string; locale: string }).locale;
+  const t = await getTranslations({ locale, namespace: "blog" });
   // @template:i18n-end
   // @template:no-i18n-start
+  // @ts-ignore
   const locale = "en";
   // @template:no-i18n-end
 
@@ -107,12 +120,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
     const showUpdated = isUpdatedAfterPublish(post.date, post.updatedAt);
     // @template:i18n-start
-    // const postUrl = `${BASE_URL}/${locale}/blog/${slug}`;
+    // @ts-ignore
+    const postUrl = `${BASE_URL}/${locale}/blog/${slug}`;
     // @template:i18n-end
     // @template:no-i18n-start
+    // @ts-ignore
     const postUrl = `${BASE_URL}/blog/${slug}`;
     // @template:no-i18n-end
     const coverImageUrl = post.coverImage?.heroUrl ?? post.coverImage?.url;
+    // @template:i18n-start
+    // @ts-ignore
+    const tocLabel = t("tableOfContents");
+    // @template:i18n-end
+    // @template:no-i18n-start
+    // @ts-ignore
+    const tocLabel = "Table of Contents";
+    // @template:no-i18n-end
 
     return (
       <>
@@ -133,7 +156,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           >
             <ArrowLeft className="size-4" />
             {/* @template:i18n-start */}
-            {/* {t("backToList")} */}
+            {t("backToList")}
             {/* @template:i18n-end */}
             {/* @template:no-i18n-start */}
             Back to Blog
@@ -154,7 +177,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <span className="flex items-center gap-1.5">
                   <Clock className="size-4" />
                   {/* @template:i18n-start */}
-                  {/* {t("readingTime", { minutes: post.readingTime })} */}
+                  {t("readingTime", { minutes: post.readingTime })}
                   {/* @template:i18n-end */}
                   {/* @template:no-i18n-start */}
                   {`${post.readingTime} min read`}
@@ -164,7 +187,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {showUpdated && post.updatedAt && (
                 <Badge variant="outline" className="text-xs">
                   {/* @template:i18n-start */}
-                  {/* {t("updated", { date: formatDate(post.updatedAt, locale) })} */}
+                  {t("updated", { date: formatDate(post.updatedAt, locale) })}
                   {/* @template:i18n-end */}
                   {/* @template:no-i18n-start */}
                   {`Updated ${formatDate(post.updatedAt, locale)}`}
@@ -206,15 +229,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             {/* Desktop TOC sidebar */}
             {headings.length > 0 && (
-              <aside
-                className="hidden lg:block"
-                // @template:i18n-start
-                // aria-label={t("tableOfContents")}
-                // @template:i18n-end
-                // @template:no-i18n-start
-                aria-label="Table of Contents"
-                // @template:no-i18n-end
-              >
+              <aside className="hidden lg:block" aria-label={tocLabel}>
                 <TableOfContents headings={headings} />
               </aside>
             )}
