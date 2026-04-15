@@ -7,7 +7,9 @@
         "src/ui/blog/",
         "src/app/blog/",
         "src/app/actions/blog.ts",
-        "src/app/feed.xml/"
+        "src/app/feed.xml/",
+        "src/core/blog.ts",
+        "src/ui/lib/jsonLd.tsx"
       ],
       "markers": ["blog"],
       "deps": ["@lexical/code", "lexical", "shiki"],
