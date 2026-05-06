@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm arch:check
+      - name: Stub importMap for build
+        run: echo 'export const importMap = {};' > 'src/app/(payload)/importMap.js'
+      - run: PAYLOAD_ENABLED=false pnpm build
+        env:
+          PAYLOAD_SECRET: ci-dummy-secret

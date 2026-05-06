@@ -1,12 +1,13 @@
-import { getSettings } from "@/lib/payload";
-
-export default async function Home() {
-  const settings = await getSettings();
+export default function Home() {
   return (
     <main className="mx-auto max-w-3xl p-8">
-      <h1 className="text-3xl font-bold">{settings?.siteName ?? "New site"}</h1>
+      <h1 className="text-3xl font-bold">New site</h1>
       <p className="mt-4 text-muted-foreground">
-        {settings?.description ?? "Edit the Settings global in the Payload admin."}
+        Edit <code>src/app/page.tsx</code> to get started, or open{" "}
+        <a href="/admin" className="underline">
+          /admin
+        </a>{" "}
+        to manage content.
       </p>
     </main>
   );
