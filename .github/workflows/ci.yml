@@ -18,12 +18,12 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Stub importMap
+        run: echo 'export const importMap = {};' > 'src/app/(payload)/admin/importMap.js'
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm arch:check
-      - name: Stub importMap for build
-        run: echo 'export const importMap = {};' > 'src/app/(payload)/importMap.js'
       - run: PAYLOAD_ENABLED=false pnpm build
         env:
           PAYLOAD_SECRET: ci-dummy-secret
