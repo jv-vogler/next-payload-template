@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { RootPage, generatePageMetadata } from "@payloadcms/next/views";
 import config from "@payload-config";
-import { importMap } from "../../importMap.js";
+import { importMap } from "../importMap.js";
 
 const DISABLED = process.env.PAYLOAD_ENABLED === "false";
 
