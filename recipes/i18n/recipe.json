@@ -1,0 +1,8 @@
+{
+  "name": "i18n",
+  "description": "next-intl with locale-prefixed routing, message catalogs, and middleware",
+  "deps": ["next-intl"],
+  "devDeps": [],
+  "envVars": [],
+  "postInstall": "Manual edits required — see recipes/i18n/README.md for the full walkthrough.\n\nSummary:\n  1. Move src/app/(frontend)/{layout,page}.tsx and any other frontend routes under src/app/[locale]/(frontend)/\n  2. Wrap layout.tsx with NextIntlClientProvider and call setRequestLocale(locale)\n  3. Register the middleware in src/proxy.ts (already copied) and re-export from src/middleware.ts if you have one\n  4. Update next.config.ts: const withNextIntl = createNextIntlPlugin(); export default withNextIntl(nextConfig)\n\nLocales default to ['en', 'pt'] — edit src/i18n/routing.ts to change."
+}

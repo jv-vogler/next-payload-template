@@ -1,0 +1,8 @@
+{
+  "name": "blog",
+  "description": "Posts collection + Lexical code highlight + /blog routes + RSS feed",
+  "deps": ["@lexical/code", "lexical", "shiki"],
+  "devDeps": [],
+  "envVars": ["NEXT_PUBLIC_BASE_URL"],
+  "postInstall": "Manual edits required. Open src/payload.config.ts and:\n  1. import Posts from \"@/collections/Posts\" + LexicalCodeFeature() from \"@/features/lexicalCode/feature.server\"\n  2. add Posts to the `collections` array\n  3. add LexicalCodeFeature() to the `features` array on lexicalEditor()\n\nIf you also want /blog in your sitemap, add the entries from `src/app/sitemap.ts` (see recipes/blog/README.md).\n\nNEXT_PUBLIC_BASE_URL is used to build absolute URLs in OG tags and the RSS feed."
+}

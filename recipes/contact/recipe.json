@@ -1,0 +1,8 @@
+{
+  "name": "contact",
+  "description": "Resend-backed contact form with lazy validation and reserved-height field hints",
+  "deps": ["resend", "react-hook-form", "@hookform/resolvers"],
+  "devDeps": [],
+  "envVars": ["RESEND_API_KEY", "CONTACT_EMAIL_TO", "CONTACT_EMAIL_FROM"],
+  "postInstall": "Drop <ContactSection /> into a page (e.g. `src/app/page.tsx`) or import <ContactForm /> directly.\n\nRESEND_API_KEY is required. CONTACT_EMAIL_TO is the inbox you want messages delivered to. CONTACT_EMAIL_FROM defaults to onboarding@resend.dev for testing — set it to a verified sender on your domain before going live.\n\nAll user-facing strings are English placeholders. See recipes/contact/README.md for where to swap copy."
+}

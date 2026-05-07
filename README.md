@@ -1,73 +1,79 @@
 # next-payload-template
 
-A Next.js 16 + Payload CMS 3 template with opt-in features, Vercel Postgres/Blob, and agent skills out-of-the-box.
+A small, opinionated starter for **Next.js 16 + Payload CMS 3** on Vercel
+(Postgres + Blob). Ships only the basics — auth, media uploads, shadcn
+primitives, sane tooling. Optional features (blog, contact form, i18n,
+site-settings global) live as **add-on recipes** you install on demand.
 
 ## Quick start
 
 ```bash
-gh repo create my-app --template jv-vogler/next-payload-template --private --clone
-cd my-app
+git clone <this-repo> my-site
+cd my-site
+cp .env.example .env.local      # fill in PAYLOAD_SECRET, POSTGRES_URL, BLOB_READ_WRITE_TOKEN
 pnpm install
-pnpm tsx setup.ts --name=my-app
+pnpm db:migrate
+pnpm dev                         # http://localhost:3000 + http://localhost:3000/admin
 ```
 
-The setup script prompts for optional features (blog, i18n, contact, seed, GA), prunes unused code and deps, writes `.env.local`, commits, and self-deletes.
+Create the first admin user from the Payload UI on first visit, or via
+`pnpm payload`.
 
-### Non-interactive
+## What's in the base
+
+- Next.js 16 (Turbopack) + React 19
+- Payload 3 with the Vercel Postgres adapter and Vercel Blob storage
+- Two collections: `Users` (auth), `Media` (uploads)
+- Tailwind v4 + shadcn primitives (`Button`, `Input`, `Textarea`, `Label`, `Card`, `Badge`, `Dialog`)
+- Vercel Analytics wired in `src/app/layout.tsx`
+- Lightweight architecture rules (`src/core/` ⊄ react/next, `src/lib/` ⊄ app/ui) enforced by `scripts/arch-check.sh`
+- Tooling: oxlint, oxfmt, tsgo typecheck, husky + lint-staged
+- DB helpers: `pnpm db:branch` (per-dev Neon branch), `db:migrate`, `db:reset`
+
+## Recipes (opt-in)
+
+Each recipe is a self-contained add-on under `recipes/<name>/`. Install with:
 
 ```bash
-pnpm tsx setup.ts --name=my-app --with-blog --no-i18n --no-contact --no-seed --no-ga --skip-neon
+pnpm template:add <name>
 ```
 
-## Features
+| Recipe          | What it adds                                                                          |
+| --------------- | ------------------------------------------------------------------------------------- |
+| `blog`          | `Posts` collection, Lexical code blocks (Shiki), `/blog` routes, RSS feed             |
+| `contact`       | Resend-backed contact form with lazy validation + field hints                         |
+| `i18n`          | `next-intl` with locale-prefixed routing (`/en`, `/pt`)                               |
+| `site-settings` | Editable site-wide global (name, SEO defaults, social links) + `getSettings()` helper |
 
-| Feature  | Default | Flag             | Includes                                             |
-| -------- | ------- | ---------------- | ---------------------------------------------------- |
-| Users    | Always  | —                | Auth, admin/user roles                               |
-| Media    | Always  | —                | Uploads with three sizes, Vercel Blob storage        |
-| Settings | Always  | —                | Site name, SEO, OG image, social links               |
-| Blog     | On      | `--with/no-blog` | Posts collection, `/blog`, `/feed.xml`, code blocks  |
-| i18n     | Off     | `--with-i18n`    | `next-intl`, `[locale]/` routing, EN + PT stubs      |
-| Contact  | Off     | `--with-contact` | Resend form, server action, UI                       |
-| Seed     | On      | `--with-seed`    | `pnpm seed` scaffold + `seedSettings` / `seedPosts`  |
-| GA       | Off     | `--with-ga`      | `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var hook-in only |
+Each recipe ships its own README documenting the manual edits to
+`payload.config.ts` (or `next.config.ts`, for `i18n`). The runner copies
+files, installs deps, and appends env stubs to `.env.example`. It refuses to
+overwrite existing files without `--force` and prints a diff for any
+conflicts.
 
-## One-time setup (after `setup.ts`)
+```bash
+pnpm template:add blog               # install
+pnpm template:add blog --dry-run     # show what would happen
+pnpm template:add blog --force       # overwrite existing files
+```
 
-1. **Neon + Vercel**: install the [Neon ↔ Vercel integration](https://vercel.com/integrations/neon). Enable "preview branches per deploy". Vercel will inject `POSTGRES_URL` et al. into your project.
-2. **Vercel Blob**: create a Blob store at [vercel.com/dashboard/stores](https://vercel.com/dashboard/stores). Vercel injects `BLOB_READ_WRITE_TOKEN`.
-3. **PAYLOAD_SECRET**: generate and set in Vercel: `openssl rand -hex 32`.
-4. **Local dev branch**: `pnpm db:branch` creates `dev-$USER` from `main` and writes its URL into `.env.local`.
-5. **First migration**: `pnpm db:migrate`.
-6. **First admin user**: `pnpm payload`.
+Once you've installed everything you want, you can `rm -rf recipes/`.
 
-## DB workflow
+## Scripts
 
-- `pnpm db:branch` — create/ensure `dev-$USER` branch and point `.env.local` at it.
-- `pnpm db:reset` — reset `dev-$USER` to `main` (pulls fresh prod schema + data).
-- `pnpm db:migrate:create <name>` — generate a Payload migration SQL file.
-- `pnpm db:migrate` — apply pending migrations.
-- `pnpm db:migrate:status` — list pending migrations.
+| Command                                                              | What                                                             |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `pnpm dev`                                                           | Next dev (Turbopack)                                             |
+| `pnpm build`                                                         | Production build                                                 |
+| `pnpm typecheck` / `pnpm lint` / `pnpm format`                       | Pre-commit runs these on staged files                            |
+| `pnpm arch:check`                                                    | Layer-rules check (also in CI)                                   |
+| `pnpm db:branch`                                                     | Create/ensure a per-dev Neon branch and point `.env.local` at it |
+| `pnpm db:migrate` / `db:migrate:create <name>` / `db:migrate:status` | Payload migrations                                               |
+| `pnpm template:add <name>`                                           | Install a recipe                                                 |
 
-Schema is committed to `src/migrations/`. `vercel-build` runs `payload migrate` before `next build`.
+## Notes
 
-## Admin toggle
-
-Set `PAYLOAD_ENABLED=false` to run as a pure static Next.js site. The admin UI returns 404, all Payload API routes return 404, and `getPayloadSafe()` returns `null` so pages fall back to defaults.
-
-## Architecture rules
-
-- `src/core/` — pure TS domain. No React, no Next. No imports from `app/` or `ui/`.
-- `src/lib/` — shared helpers. May import React. No imports from `app/` or `ui/`.
-- `src/ui/` — React components.
-- `src/app/` — Next.js routes + server actions. Composes everything.
-
-Enforced by `pnpm arch:check` (runs in CI).
-
-## Agent skills
-
-`.agents/skills/` contains the canonical skill definitions. `.claude/skills/` contains symlinks for Claude Code. Skills included: `deploy-to-vercel`,`frontend-design`, `payload`, `vercel-composition-patterns`, `vercel-react-best-practices`, `web-design-guidelines`.
-
-## Tooling
-
-pnpm 10, Node 22, oxlint, oxfmt, tsgo, husky, lint-staged. Pre-commit runs typecheck + format + lint on staged files.
+- Setting `PAYLOAD_ENABLED=false` makes the site a pure static Next app:
+  `/admin` returns 404 and `getPayloadSafe()` returns `null`. Useful for
+  preview deploys where the DB isn't reachable.
+- The base has no project-specific copy or branding. Add your own as you go.

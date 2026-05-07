@@ -1,0 +1,8 @@
+{
+  "name": "site-settings",
+  "description": "Editable site-wide settings global (name, SEO defaults, socials) + getSettings() helper",
+  "deps": [],
+  "devDeps": [],
+  "envVars": [],
+  "postInstall": "Manual edit required. Open src/payload.config.ts and:\n  1. import Settings from \"@/globals/Settings\"\n  2. add `globals: [Settings]` to the buildConfig() call (or append to existing globals array)\n\nThen run `pnpm db:migrate:create site-settings` and `pnpm db:migrate`.\n\nUse it in pages/layouts via:\n  import { getSettings } from \"@/lib/settings\";\n  const settings = await getSettings();"
+}
